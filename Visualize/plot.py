@@ -21,11 +21,11 @@ def plot_multi_col(X, Y, sub_w, sub_h, title=None):
         fig.canvas.manager.set_window_title(title)
     _colors = plt.rcParams["axes.prop_cycle"]()
     colors = []
-    for i in range(len(X.columns)):
+    for i in range(len(X[0])):
         c = next(_colors)["color"]
         colors.append(c)
     shuffle(colors)
-    for i, col in enumerate(X.columns):
+    for i, col in enumerate(X[0]):
         axis[i%sub_w, i%sub_h].scatter(X[col], Y, color=colors[i])
         axis[i%sub_w, i%sub_h].set_title(col)
         axis[i%sub_w, i%sub_h].set_ylabel('Price')
