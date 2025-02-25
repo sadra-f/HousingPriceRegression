@@ -2,7 +2,7 @@ import numpy as np
 from Visualize.plot import plot_on_process
 from matplotlib import pyplot as plt
 from matplotlib.animation import FuncAnimation
-from os import makedirs
+import os
 
 class LinearRegression:
     def __init__(self, learning_rate=0.01, num_iterations=100000):
@@ -18,7 +18,8 @@ class LinearRegression:
         self._loss_hist = []
         self._hist_ready = True
         self._hist_path = "tmp/loss_history.txt"
-        makedirs("tmp/")
+        if not os.path.exists(os.getcwd() + "/tmp"):
+            os.makedirs("tmp/")
         np.savetxt(self._hist_path, [])
         tmp = plot_on_process(self._hist_path, "loss Function")
         self._processes.append(tmp)
