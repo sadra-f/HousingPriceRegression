@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from Visualize.plot import plot_multi_column_on_process as plot
 from MLModel.LinearRegression import LinearRegression as LR
-
+from sklearn.linear_model import LinearRegression as SKLLR
 
 def main():
 
@@ -25,13 +25,20 @@ def main():
     test_Y = np.array(test['price'])
     test_X = np.array(test.drop(['price'], axis=1))
     
-    regression_model = LR()
+    slrm = SKLLR(copy_X=True)
+    slrm = slrm.fit(train_X, train_Y)
+    res2 = slrm.predict(test_X)
+    
+    regression_model = LR(plot_loss=True)
     regression_model.train(train_X, train_Y)
     regression_model.save_model("weights.txt")
 
     regression_model = LR()
     regression_model.load_model("weights.txt")
     res = regression_model.predict(test_X)
+    # new_Y = regression_model.normalize(test_Y, only_mixmax=True)
+    print("mean of prediction difference PERSONAL=> ", np.mean(np.abs(np.subtract(test_Y, res))))
+    print("mean of prediction difference SKLEARN => ", np.mean(np.abs(np.subtract(test_Y, res2))))
     regression_model.calc_loss(res, test_Y)
 
 
