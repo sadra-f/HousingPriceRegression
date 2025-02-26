@@ -5,7 +5,7 @@ from matplotlib.animation import FuncAnimation
 import os
 
 class LinearRegression:
-    def __init__(self, learning_rate=0.01, num_iterations=100000):
+    def __init__(self, learning_rate=0.01, num_iterations=100000, plot_loss=False):
         self.learning_rate = learning_rate
         self.num_iterations = num_iterations
         self.weights = None
@@ -20,16 +20,17 @@ class LinearRegression:
         self._hist_path = "tmp/loss_history.txt"
         if not os.path.exists(os.getcwd() + "/tmp"):
             os.makedirs("tmp/")
-        np.savetxt(self._hist_path, [])
-        tmp = plot_on_process(self._hist_path, "loss Function")
-        self._processes.append(tmp)
+        if plot_loss:
+            np.savetxt(self._hist_path, [])
+            tmp = plot_on_process(self._hist_path, "loss Function")
+            self._processes.append(tmp)
 
 
     def train(self, X, y):
         self._loss_hist = []
         self.org_X = X
         self.y = y
-
+        # self.y = self.normalize(self.y)
         self.X = self.normalize(self.org_X)
         self.X_size = len(self.X)
         
@@ -57,7 +58,7 @@ class LinearRegression:
     def initialize_weights(self):
         self.weights = np.ones((1, len(self.X[0])+1))
 
-    def normalize(self, X):
+    def normalize(self, X, only_mixmax=False):
         """Initially performs Mean Normalization and then scales the normalized values to new range
 
         Args:
@@ -66,10 +67,13 @@ class LinearRegression:
         Returns:
             np.array : normalized X
         """
-        mean = np.mean(X, axis=0)
-        max = np.max(X, axis=0)
-        min = np.min(X, axis=0)
-        normalized_X = (X - mean) / (max - min)
+        if not only_mixmax:
+            mean = np.mean(X, axis=0)
+            max = np.max(X, axis=0)
+            min = np.min(X, axis=0)
+            normalized_X = (X - mean) / (max - min)
+        else:
+            normalized_X = X
         max = np.max(normalized_X, axis=0)
         min = np.min(normalized_X, axis=0)
         normalized_X = self.normal_min + (((normalized_X - min)*(self.normal_max - self.normal_min))/(max - min))
@@ -85,8 +89,10 @@ class LinearRegression:
 
     def load_model(self, filename):
         self.weights = np.loadtxt(filename)
+        self.weights = self.weights.reshape((1, len(self.weights)))
 
     def predict(self, test_X):
+        self.normalize(test_X)
         return self._predict(test_X)
 
     def __del__(self):
