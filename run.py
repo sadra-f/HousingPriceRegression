@@ -36,10 +36,12 @@ def main():
     regression_model = LR()
     regression_model.load_model("weights.txt")
     res = regression_model.predict(test_X)
-    # new_Y = regression_model.normalize(test_Y, only_mixmax=True)
-    print("mean of prediction difference PERSONAL=> ", np.mean(np.abs(np.subtract(test_Y, res))))
-    print("mean of prediction difference SKLEARN => ", np.mean(np.abs(np.subtract(test_Y, res2))))
-    regression_model.calc_loss(res, test_Y)
+
+    print("Mean of Squared Error for Custom Model=> ", np.mean(np.abs(np.subtract(test_Y, res))**2))
+    print("Mean of Squared Error for SKLEARN => ", np.mean(np.abs(np.subtract(test_Y, res2))**2))
+    print("Root Mean Squared Percentage Error for Custom Model=> ", np.sqrt(np.mean(((res - test_Y) / test_Y) ** 2)) * 100)
+    print("Root Mean Squared Percentage Error for SKLEARN => ", np.sqrt(np.mean(((res2 - test_Y) / test_Y) ** 2)) * 100)
+    print()
 
 
 
