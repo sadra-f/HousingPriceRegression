@@ -43,13 +43,16 @@ class LinearRegression:
         for i in range(self.num_iterations):
             predictions = self._predict(self.X)
             if i % 1000 == 0:
-                _loss = self.calc_loss(predictions, self.Y)
-                print(i, '->',_loss)
-                self._loss_history.append(_loss)
-                np.savetxt(self._hist_path, self._loss_history)
+                self._log_loss(i, predictions)
             self.adjust_weights(predictions)
         
         return self
+    
+    def _log_loss(self, iter, predictions):
+        _loss = self.calc_loss(predictions, self.Y)
+        print(iter, '->',_loss)
+        self._loss_history.append(_loss)
+        np.savetxt(self._hist_path, self._loss_history)
     
     def adjust_weights(self, predictions):
         """performs the 'learning' of the weights
