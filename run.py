@@ -18,7 +18,7 @@ def main():
     train = dataset.sample(frac=0.7,random_state=200)
     train_Y = np.array(train['price'])
     train_X = np.array(train.drop(['price'], axis=1))
-    plot(train_X, train_Y, 5, 3, "Train Dataset")
+    # plot(train_X, train_Y, 5, 3, "Train Dataset")
 
     test = dataset.drop(train.index)
 
@@ -31,10 +31,10 @@ def main():
     
     regression_model = LR()
     regression_model.train(train_X, train_Y)
-    regression_model.save_model("weights.txt")
+    regression_model.save_model("trained_model")
 
     regression_model = LR()
-    regression_model.load_model("weights.txt")
+    regression_model.load_model("trained_model")
     res = regression_model.predict(test_X)
 
     print("Mean of Squared Error for Custom Model=> ", np.mean(np.abs(np.subtract(test_Y, res))**2))
