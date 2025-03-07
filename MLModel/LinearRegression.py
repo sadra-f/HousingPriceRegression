@@ -31,6 +31,15 @@ class LinearRegression:
             self._processes.append(tmp)
 
     def train(self, X, Y):
+        """train the model using the input training data
+
+        Args:
+            X (_type_): Train Dataset Features
+            Y (_type_): Train Dataset Target
+
+        Returns:
+            LinearRegression: returns self
+        """
         self._loss_history = []
         self.org_X = X
         self.org_Y = Y
@@ -72,6 +81,12 @@ class LinearRegression:
         self.weights = np.ones((1, len(self.X[0])+1))
 
     def _calc_mean_std(self, X, Y=None):
+        """calculates the mean and standard deviation for each column of X and Y.
+
+        Args:
+            X (_type_): Train Dataset Features
+            Y (_type_, optional): Train Dataset Target
+        """
         self.x_train_mean = np.mean(X, axis=0)
         self.x_train_standard_deviation = np.std(X, axis=0)
         if Y is not None:
@@ -90,11 +105,25 @@ class LinearRegression:
         return (value * std) + mean
 
     def calc_loss(self, predictions, Y):
+        """Calculates the loss for predictions based on the original Y values
+
+        Args:
+            predictions (_type_): Predictions made by the model for Y/target
+            Y (_type_): Original Y/target values
+
+        Returns:
+            _type_: The loss 
+        """
         diff = predictions - Y
         diff *= diff
         return  np.sum(diff) / (2 * len(predictions))
 
     def save_model(self, filename):
+        """Saves the model data in the specified file path
+
+        Args:
+            filename (path/str): Path to target file
+        """
         model = {
             "xtm" : self.x_train_mean,
             "xtsd" : self.x_train_standard_deviation,
@@ -106,6 +135,11 @@ class LinearRegression:
             pickle.dump(model, file, protocol=pickle.HIGHEST_PROTOCOL)
 
     def load_model(self, filename):
+        """Loads pretrained model from file
+
+        Args:
+            filename (path/str): Path to target file
+        """
         with open(f'{filename}', 'rb') as handle:
             model = pickle.load(handle)
 
@@ -116,6 +150,14 @@ class LinearRegression:
         self.weights = model["w"][0].reshape((1, len(model["w"][0])))
 
     def predict(self, test_X):
+        """Makes predictions for test_X values and returns the predictions.
+
+        Args:
+            test_X (ndarray): Values the predictions for which are required
+
+        Returns:
+            ndarray : predictions for test_X made by the regression model
+        """
         test_X = self._standardize(test_X)
         predictions =  self._predict(test_X)
         return self._destandardize(predictions, self.y_train_mean, self.y_train_standard_deviation)
