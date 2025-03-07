@@ -44,7 +44,7 @@ class LinearRegression:
                 np.savetxt(self._hist_path, self._loss_hist)
             self.adjust_weights(predictions)
         
-        return self.weights
+        return self
 
     def adjust_weights(self, predictions):
         difference = np.array(predictions - self.y).reshape((self.X_size, 1))
