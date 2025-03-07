@@ -39,7 +39,7 @@ def _update(i):
 
 def plot_line(file_path , title=None):
     Y = np.loadtxt(file_path)
-    X = [i for i in range(len(Y))]
+    X = [i*1000 for i in range(len(Y))]
     ani = FuncAnimation(plt.gcf(), _update, interval=1000)
     plt.tight_layout()
     plt.show()
