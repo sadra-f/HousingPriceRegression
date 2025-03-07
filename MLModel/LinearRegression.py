@@ -6,7 +6,7 @@ import os
 import pickle
 
 class LinearRegression:
-    def __init__(self, learning_rate=0.003, num_iterations=100000, plot_loss=False):
+    def __init__(self, learning_rate=0.003, num_iterations=10000, plot_loss=False):
         self.learning_rate = np.float64(learning_rate)
         self.num_iterations = num_iterations
 
@@ -42,7 +42,7 @@ class LinearRegression:
         self.initialize_weights()
         for i in range(self.num_iterations):
             predictions = self._predict(self.X)
-            if i % 1000 == 0:
+            if i % 100 == 0:
                 self._log_loss(i, predictions)
             self.adjust_weights(predictions)
         
