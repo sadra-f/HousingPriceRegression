@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from Visualize.plot import plot_multi_column_on_process as plot
+from Visualize.plot import plot_multi_col as plot
 from MLModel.LinearRegression import LinearRegression as LR
 from sklearn.linear_model import LinearRegression as SKLLR
 
@@ -29,7 +29,7 @@ def main():
     slrm = slrm.fit(train_X, train_Y)
     res2 = slrm.predict(test_X)
     
-    regression_model = LR(plot_loss=True)
+    regression_model = LR()
     regression_model.train(train_X, train_Y)
     regression_model.save_model("weights.txt")
 
