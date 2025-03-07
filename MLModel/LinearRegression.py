@@ -5,8 +5,8 @@ from matplotlib.animation import FuncAnimation
 import os
 
 class LinearRegression:
-    def __init__(self, learning_rate=0.01, num_iterations=100000, plot_loss=False):
-        self.learning_rate = learning_rate
+    def __init__(self, learning_rate=0.003, num_iterations=100000, plot_loss=False):
+        self.learning_rate = np.float64(learning_rate)
         self.num_iterations = num_iterations
         self.weights = None
         self.X = None
@@ -15,7 +15,7 @@ class LinearRegression:
         self.normal_min = -3
         self.normal_max = 3
         self._processes = []
-        self._loss_hist = []
+        self._loss_history = []
         self._hist_ready = True
         self._hist_path = "tmp/loss_history.txt"
         if not os.path.exists(os.getcwd() + "/tmp"):
@@ -27,11 +27,12 @@ class LinearRegression:
 
 
     def train(self, X, y):
-        self._loss_hist = []
+        self._loss_history = []
         self.org_X = X
+        self.X = X
         self.y = y
         # self.y = self.normalize(self.y)
-        self.X = self.normalize(self.org_X)
+        # self.X = self.normalize(self.org_X)
         self.X_size = len(self.X)
         
         self.initialize_weights()
@@ -40,8 +41,8 @@ class LinearRegression:
             if i % 1000 == 0:
                 _loss = self.calc_loss(predictions, self.y)
                 print(i, '->',_loss)
-                self._loss_hist.append(_loss)
-                np.savetxt(self._hist_path, self._loss_hist)
+                self._loss_history.append(_loss)
+                np.savetxt(self._hist_path, self._loss_history)
             self.adjust_weights(predictions)
         
         return self
@@ -58,7 +59,7 @@ class LinearRegression:
     def initialize_weights(self):
         self.weights = np.ones((1, len(self.X[0])+1))
 
-    def normalize(self, X, only_mixmax=False):
+    def normalize(self, vec, only_mixmax=False):
         """Initially performs Mean Normalization and then scales the normalized values to new range
 
         Args:
@@ -68,17 +69,24 @@ class LinearRegression:
             np.array : normalized X
         """
         if not only_mixmax:
-            mean = np.mean(X, axis=0)
-            max = np.max(X, axis=0)
-            min = np.min(X, axis=0)
-            normalized_X = (X - mean) / (max - min)
+            mean = np.mean(vec, axis=0)
+            max = np.max(vec, axis=0)
+            min = np.min(vec, axis=0)
+            normalized_vec = (vec - mean) / (max - min)
         else:
-            normalized_X = X
-        max = np.max(normalized_X, axis=0)
-        min = np.min(normalized_X, axis=0)
-        normalized_X = self.normal_min + (((normalized_X - min)*(self.normal_max - self.normal_min))/(max - min))
-        return normalized_X
+            normalized_vec = vec
+        # max = np.max(normalized_vec, axis=0)
+        # min = np.min(normalized_vec, axis=0)
+        # normalized_vec = self.normal_min + (((normalized_vec - min)*(self.normal_max - self.normal_min))/(max - min))
+        return normalized_vec
     
+    def denormalize(self, new_vec, old_vec):
+        max_old = np.max(old_vec, axis=0)
+        min_old = np.min(old_vec, axis=0)
+        old_mean = np.mean(old_vec, axis=0)
+        denormalized = new_vec * (max_old - min_old) + old_mean
+        return denormalized
+
     def calc_loss(self, predictions, Y):
         diff = predictions - Y
         diff *= diff
