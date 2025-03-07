@@ -25,9 +25,9 @@ def plot_multi_col(X, Y, sub_w, sub_h, title=None):
         c = next(_colors)["color"]
         colors.append(c)
     shuffle(colors)
-    for i, col in enumerate(X[0]):
-        axis[i%sub_w, i%sub_h].scatter(X[col], Y, color=colors[i])
-        axis[i%sub_w, i%sub_h].set_title(col)
+    for i in range(len(X[0])):
+        axis[i%sub_w, i%sub_h].scatter(X.transpose()[i], Y, color=colors[i])
+        axis[i%sub_w, i%sub_h].set_title(i)
         axis[i%sub_w, i%sub_h].set_ylabel('Price')
     plt.show()
 
