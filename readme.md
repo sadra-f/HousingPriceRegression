@@ -21,13 +21,11 @@ Loss vs. Iteration graph over 10k iterations
 
 ## Evaluation
 ##### This implementation performed in comparison to the linear regression model provided by sci-kit learn library as follows:
-<pre>
-Mean of Squared Error for Custom Model=>  37558185734.444756
-Mean of Squared Error for SKLEARN =>  37557177556.185135
-
-Root Mean Squared Percentage Error for Custom Model=>  34.70862548988226
-Root Mean Squared Percentage Error for SKLEARN =>  34.71202648861756
-</pre>
+Mean of Squared Error for Custom Model=>  37558185734.444756&ensp;
+Mean of Squared Error for SKLEARN =>  37557177556.185135&ensp;
+&ensp;
+Root Mean Squared Percentage Error for Custom Model=>  34.70862548988226&ensp;
+Root Mean Squared Percentage Error for SKLEARN =>  34.71202648861756&ensp;
 ## Code Sample
 ```
 # training a model
