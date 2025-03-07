@@ -102,11 +102,11 @@ class LinearRegression:
             "ytsd" : self.y_train_standard_deviation,
             "w" : self.weights,
         }
-        with open(f'tmp/{filename}', 'wb') as file:
+        with open(f'{filename}', 'wb') as file:
             pickle.dump(model, file, protocol=pickle.HIGHEST_PROTOCOL)
 
     def load_model(self, filename):
-        with open(f'tmp/{filename}', 'rb') as handle:
+        with open(f'{filename}', 'rb') as handle:
             model = pickle.load(handle)
 
         self.x_train_mean = model["xtm"]
