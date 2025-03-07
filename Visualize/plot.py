@@ -33,13 +33,15 @@ def plot_multi_col(X, Y, sub_w, sub_h, title=None):
 
 def _update(i):
     Y = np.loadtxt("tmp/loss_history.txt")[1:]
-    X = [i for i in range(len(Y))]
+    X = [i*100 for i in range(len(Y))]
     plt.cla()
     plt.plot(X, Y)
-
+    plt.title("Linear Regression Loss vs. Iteration")
+    plt.xlabel("Iteration")
+    plt.ylabel("Loss")
+    plt.gcf().canvas.manager.set_window_title('Test')
 def plot_line(file_path , title=None):
-    Y = np.loadtxt(file_path)
-    X = [i*1000 for i in range(len(Y))]
     ani = FuncAnimation(plt.gcf(), _update, interval=1000)
     plt.tight_layout()
     plt.show()
+    
