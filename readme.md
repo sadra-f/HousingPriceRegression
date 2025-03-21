@@ -1,11 +1,11 @@
 # Implementing a Regression Model for Housing Price Prediction
-An attempt to improve personal knowledge of Regression models by implementing one to predict housing prices.
+An attempt to improve personal knowledge of Regression models by implementing one, and using a housing prices dataset to train and test the model.
 ## Dataset
 
-##### Normalized Dataset where the range of all columns is [-3, 3]
+##### Standardized Dataset:
 ![Standardized Dataset](./Standardized_Dataset.png)
 [king county housing prices](https://www.kaggle.com/datasets/harlfoxem/housesalesprediction) dataset from Kaggle.
-columns in order shown in the image:
+Selected columns from dataset, provided in the same order as shown in the image:
 |               |                   |           |
 |---------------|-------------------|-----------|
 |bedrooms		|bathrooms 			|sqft_living|
@@ -40,7 +40,7 @@ res = regression_model.predict(test_X)
 # save trained model
 regression_model.save_model("trained_model")
 
-# load a pretrained model
+# load a pre-trained model
 regression_model = LR()
 regression_model.load_model("trained_model")
 ````
